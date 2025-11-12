@@ -8,10 +8,35 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="title" id="title">Digital Twin Chat - Warren Buffett</h1>
+        <div class="header">
+            <h1 class="title" id="title">Digital Twin Chat - Warren Buffett</h1>
+            <button id="settingsButton" class="settings-button" title="Settings">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 8C13.1 8 14 7.1 14 6C14 4.9 13.1 4 12 4C10.9 4 10 4.9 10 6C10 7.1 10.9 8 12 8ZM12 10C10.9 10 10 10.9 10 12C10 13.1 10.9 14 12 14C13.1 14 14 13.1 14 12C14 10.9 13.1 10 12 10ZM12 16C10.9 16 10 16.9 10 18C10 19.1 10.9 20 12 20C13.1 20 14 19.1 14 18C14 16.9 13.1 16 12 16Z" fill="white"/>
+                </svg>
+            </button>
+        </div>
+
+        <div class="settings-panel" id="settingsPanel">
+            <h3>Settings</h3>
+            <div class="setting-group">
+                <label for="fontSize">Font Size:</label>
+                <select id="fontSize" class="font-size-select">
+                    <option value="small">Small</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="large">Large</option>
+                </select>
+            </div>
+            <div class="setting-group">
+                <label for="animations">Animations:</label>
+                <input type="checkbox" id="animations" checked class="animations-toggle">
+            </div>
+        </div>
+
         <div class="switch-container">
             <button id="switchButton" class="switch-button">Switch to Lorenzo Canali</button>
         </div>
+
         <div class="chat-container">
             <div id="messages" class="messages"></div>
             <div class="input-container">
@@ -21,6 +46,9 @@
         </div>
         <div id="status" class="status">Connecting...</div>
     </div>
+
+    <!-- Background particles -->
+    <div class="particles" id="particles"></div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="script.js"></script>
