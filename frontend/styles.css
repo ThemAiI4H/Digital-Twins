@@ -89,19 +89,35 @@ body::before {
     box-shadow:
         0 8px 32px rgba(0, 0, 0, 0.1),
         inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.15);
     position: relative;
     overflow: hidden;
+    border: 2px solid transparent;
+    background-clip: padding-box;
 }
 
 .container::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg,
+        #ff6b6b, #4ecdc4, #45b7d1, #96ceb4,
+        #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+    background-size: 400% 400%;
+    border-radius: 27px;
+    z-index: -1;
+    animation: borderGradient 8s ease-in-out infinite;
+}
+
+@keyframes borderGradient {
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
 }
 
 /* Header */
