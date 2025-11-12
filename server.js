@@ -1,12 +1,15 @@
 import express from "express";
 import { callLLM } from "./llmService.js";
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 
 // Express app
 const app = express();
 app.use(express.json());
 
 // Serve static files from frontend directory
-app.use(express.static('frontend'));
+const __dirname = dirname(fileURLToPath(import.meta.url));
+app.use(express.static(join(__dirname, 'frontend')));
 
 // Health check
 app.get("/health", (req, res) => {
@@ -50,7 +53,7 @@ app.post("/api/chat", async (req, res) => {
 export default app;
 
 // For local development
-if (require.main === module) {
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => {
     console.log(`🚀 Server attivo su http://localhost:${PORT}`);
