@@ -10,6 +10,10 @@
     --font-size-medium: 16px;
     --font-size-large: 18px;
     --animation-duration: 0.3s;
+    --electric-border-color: #dd8448;
+    --electric-light-color: oklch(from var(--electric-border-color) l c h);
+    --gradient-color: oklch(from var(--electric-border-color) 0.3 calc(c / 2) h / 0.4);
+    --color-neutral-900: oklch(0.185 0 0);
 }
 
 body {
@@ -79,7 +83,27 @@ body::before {
     50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
 }
 
-.container {
+/* Electric Border Container */
+.electric-container {
+    max-width: 800px;
+    width: 100%;
+    position: relative;
+    padding: 2px;
+    border-radius: 27px;
+    background: linear-gradient(
+        -30deg,
+        var(--gradient-color),
+        transparent,
+        var(--gradient-color)
+      ),
+      linear-gradient(
+        to bottom,
+        var(--color-neutral-900),
+        var(--color-neutral-900)
+      );
+}
+
+.electric-container .container {
     max-width: 800px;
     width: 100%;
     background: rgba(255, 255, 255, 0.08);
@@ -89,12 +113,15 @@ body::before {
     box-shadow:
         0 8px 32px rgba(0, 0, 0, 0.1),
         inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    border: 2px solid var(--electric-border-color);
     position: relative;
     overflow: hidden;
+    filter: url(#turbulent-displace);
+    margin-top: -4px;
+    margin-left: -4px;
 }
 
-.container::before {
+.electric-container .container::before {
     content: '';
     position: absolute;
     top: 0;
@@ -102,6 +129,105 @@ body::before {
     right: 0;
     height: 1px;
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+}
+
+/* Electric Glow Effects */
+.electric-glow-1 {
+    border: 2px solid rgba(221, 132, 72, 0.6);
+    border-radius: 27px;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    filter: blur(1px);
+    pointer-events: none;
+}
+
+.electric-glow-2 {
+    border: 2px solid var(--electric-light-color);
+    border-radius: 27px;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    filter: blur(4px);
+    pointer-events: none;
+}
+
+/* Electric Overlay Effects */
+.electric-overlay-1 {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 27px;
+    opacity: 1;
+    mix-blend-mode: overlay;
+    transform: scale(1.1);
+    filter: blur(16px);
+    background: linear-gradient(
+      -30deg,
+      white,
+      transparent 30%,
+      transparent 70%,
+      white
+    );
+    pointer-events: none;
+}
+
+.electric-overlay-2 {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 27px;
+    opacity: 0.5;
+    mix-blend-mode: overlay;
+    transform: scale(1.1);
+    filter: blur(16px);
+    background: linear-gradient(
+      -30deg,
+      white,
+      transparent 30%,
+      transparent 70%,
+      white
+    );
+    pointer-events: none;
+}
+
+/* Electric Background Glow */
+.electric-bg-glow {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 27px;
+    filter: blur(32px);
+    transform: scale(1.1);
+    opacity: 0.3;
+    z-index: -1;
+    background: linear-gradient(
+      -30deg,
+      var(--electric-light-color),
+      transparent,
+      var(--electric-border-color)
+    );
+    pointer-events: none;
 }
 
 /* Header */
@@ -402,6 +528,21 @@ body::before {
     margin-top: 20px;
     color: rgba(255, 255, 255, 0.8);
     font-size: 14px;
+}
+
+/* SVG Filter for Turbulent Displacement */
+svg {
+    position: absolute;
+    width: 0;
+    height: 0;
+}
+
+#turbulent-displace feTurbulence {
+    baseFrequency: 0.02 0.02;
+}
+
+#turbulent-displace feDisplacementMap {
+    scale: 2;
 }
 
 /* Responsive */

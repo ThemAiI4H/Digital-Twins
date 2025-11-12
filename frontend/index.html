@@ -7,7 +7,13 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
+    <div class="electric-container">
+        <div class="electric-glow-1"></div>
+        <div class="electric-glow-2"></div>
+        <div class="electric-overlay-1"></div>
+        <div class="electric-overlay-2"></div>
+        <div class="electric-bg-glow"></div>
+        <div class="container">
         <div class="header">
             <h1 class="title" id="title">Digital Twin Chat - Warren Buffett</h1>
             <button id="settingsButton" class="settings-button" title="Settings">
@@ -45,10 +51,21 @@
             </div>
         </div>
         <div id="status" class="status">Connecting...</div>
+        </div>
     </div>
 
     <!-- Background particles -->
     <div class="particles" id="particles"></div>
+
+    <!-- SVG Filter for Electric Effect -->
+    <svg>
+        <defs>
+            <filter id="turbulent-displace">
+                <feTurbulence baseFrequency="0.02 0.02" numOctaves="3" result="turbulence"/>
+                <feDisplacementMap in="SourceGraphic" in2="turbulence" scale="2"/>
+            </filter>
+        </defs>
+    </svg>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="script.js"></script>
