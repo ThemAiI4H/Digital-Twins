@@ -168,10 +168,10 @@ body::before {
 }
 
 .settings-panel h3 {
-    color: white;
+    color: black;
     margin-bottom: 15px;
     font-size: var(--font-size-medium);
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    text-shadow: none;
 }
 
 .setting-group {
@@ -182,7 +182,7 @@ body::before {
 }
 
 .setting-group label {
-    color: rgba(255, 255, 255, 0.9);
+    color: black;
     font-size: var(--font-size-small);
 }
 
@@ -243,7 +243,7 @@ body::before {
     border: none;
     border-radius: 25px;
     background: linear-gradient(45deg, #667eea, #764ba2);
-    color: white;
+    color: black;
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
@@ -322,7 +322,7 @@ body::before {
 
 .message.bot {
     background: rgba(255, 255, 255, 0.2);
-    color: white;
+    color: black;
     align-self: flex-start;
     border-bottom-left-radius: 5px;
 }
@@ -412,7 +412,7 @@ body::before {
 .status {
     text-align: center;
     margin-top: 20px;
-    color: rgba(255, 255, 255, 0.8);
+    color: black;
     font-size: 14px;
 }
 
