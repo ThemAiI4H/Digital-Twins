@@ -2,10 +2,19 @@ import OpenAI from "openai";
 import dotenv from "dotenv";
 dotenv.config();
 
+let openai = null;
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY, // 🔹 Usa la chiave dal .env
-});
+function getOpenAIClient() {
+  if (!openai) {
+    if (!process.env.OPENAI_API_KEY) {
+      throw new Error("OPENAI_API_KEY not set");
+    }
+    openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
+  }
+  return openai;
+}
 
 export async function getLLMResponse(digitalTwinId, systemPrompt, history, newMessage) {
   // Validation
@@ -23,7 +32,8 @@ export async function getLLMResponse(digitalTwinId, systemPrompt, history, newMe
   ];
 
   try {
-    const response = await openai.chat.completions.create({
+    const client = getOpenAIClient();
+    const response = await client.chat.completions.create({
       model: getModelForTwin(digitalTwinId),
       messages,
       temperature: 0.8,
