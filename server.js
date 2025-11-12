@@ -16,6 +16,14 @@ app.get("/", (req, res) => {
   res.sendFile(join(__dirname, 'frontend', 'index.html'));
 });
 
+app.get("/styles.css", (req, res) => {
+  res.sendFile(join(__dirname, 'frontend', 'styles.css'));
+});
+
+app.get("/script.js", (req, res) => {
+  res.sendFile(join(__dirname, 'frontend', 'script.js'));
+});
+
 // Health check
 app.get("/health", (req, res) => {
   res.status(200).json({
