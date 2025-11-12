@@ -95,14 +95,19 @@ const wss = new WebSocketServer({
   }
 });
 
-// Start the server
-const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
-  console.log(`🚀 Server attivo su http://localhost:${PORT}`);
-  console.log(`🔌 WebSocket disponibile su ws://localhost:${PORT}`);
-  console.log(`💚 Health check: http://localhost:${PORT}/health`);
-  console.log(`📊 Metrics: http://localhost:${PORT}/metrics`);
-});
+// For Vercel deployment, export the app
+export default app;
+
+// For local development
+if (require.main === module) {
+  const PORT = process.env.PORT || 3000;
+  server.listen(PORT, () => {
+    console.log(`🚀 Server attivo su http://localhost:${PORT}`);
+    console.log(`🔌 WebSocket disponibile su ws://localhost:${PORT}`);
+    console.log(`💚 Health check: http://localhost:${PORT}/health`);
+    console.log(`📊 Metrics: http://localhost:${PORT}/metrics`);
+  });
+}
 
 wss.on("connection", (ws) => {
   // Generate unique session ID for this WebSocket connection
