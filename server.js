@@ -8,8 +8,8 @@ const app = express();
 app.use(express.json());
 
 // Serve static files from frontend directory
-const __dirname = dirname(fileURLToPath(import.meta.url));
-app.use(express.static(join(__dirname, 'frontend')));
+// const __dirname = dirname(fileURLToPath(import.meta.url));
+// app.use(express.static(join(__dirname, 'frontend')));
 
 // Health check
 app.get("/health", (req, res) => {
