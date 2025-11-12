@@ -28,9 +28,9 @@ app.post("/api/chat", async (req, res) => {
 
     console.log(`📨 API request: ${digitalTwinId} - ${prompt.substring(0, 50)}...`);
 
-    const start = Date.now();
-    const { reply } = await callLLM(digitalTwinId, prompt, []);
-    const processingTime = Date.now() - start;
+    // Temporary: return fixed response
+    const reply = `Ciao! Sono ${digitalTwinId === 'warren-buffett' ? 'Warren Buffett' : 'Lorenzo Canali'}. Come posso aiutarti?`;
+    const processingTime = 100;
 
     console.log(`✅ API response: ${reply.substring(0, 50)}...`);
 
