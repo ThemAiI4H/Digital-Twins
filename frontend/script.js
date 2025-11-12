@@ -16,6 +16,8 @@ const switchButton = document.getElementById('switchButton');
 
 // Current digital twin
 let currentTwin = localStorage.getItem('currentTwin') || 'warren-buffett';
+let isLoading = false;
+
 updateUI();
 
 function updateUI() {
@@ -35,94 +37,6 @@ switchButton.addEventListener('click', () => {
     messagesEl.innerHTML = '';
 });
 
-// WebSocket connection
-const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-const wsUrl = `${protocol}//${window.location.host || 'localhost:3000'}`;
-let ws;
-
-function connectWebSocket() {
-    ws = new WebSocket(wsUrl);
-
-    ws.onopen = () => {
-        statusEl.textContent = 'Connected';
-        gsap.to(statusEl, { duration: 0.3, color: '#4ecdc4' });
-    };
-
-    ws.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        handleMessage(data);
-    };
-
-    ws.onclose = () => {
-        statusEl.textContent = 'Disconnected';
-        gsap.to(statusEl, { duration: 0.3, color: '#ff6b6b' });
-        // Auto reconnect after 3 seconds
-        setTimeout(connectWebSocket, 3000);
-    };
-
-    ws.onerror = (error) => {
-        console.error('WebSocket error:', error);
-        statusEl.textContent = 'Connection Error';
-        gsap.to(statusEl, { duration: 0.3, color: '#ff6b6b' });
-    };
-}
-
-connectWebSocket();
-
-function handleMessage(data) {
-    switch (data.type) {
-        case 'twin_response':
-            addMessage(data.data.reply, 'bot');
-            break;
-        case 'tts_started':
-            // TTS started, prepare for audio
-            break;
-        case 'audio_chunk':
-            handleAudioChunk(data.data);
-            break;
-        case 'tts_complete':
-            // TTS complete
-            break;
-        case 'error':
-            addMessage(`Error: ${data.data.message}`, 'bot');
-            break;
-        default:
-            console.log('Unknown message type:', data.type);
-    }
-}
-
-let audioChunks = [];
-let audioContext;
-let audioBuffer;
-
-function handleAudioChunk(data) {
-    audioChunks.push(data.audioBase64);
-
-    if (data.isFinalChunk) {
-        playAudio();
-    }
-}
-
-function playAudio() {
-    if (audioChunks.length === 0) return;
-
-    const audioData = audioChunks.join('');
-    audioChunks = [];
-
-    // Convert base64 to ArrayBuffer
-    const binaryString = atob(audioData);
-    const bytes = new Uint8Array(binaryString.length);
-    for (let i = 0; i < binaryString.length; i++) {
-        bytes[i] = binaryString.charCodeAt(i);
-    }
-
-    // Play audio
-    const blob = new Blob([bytes], { type: 'audio/mp3' });
-    const audioUrl = URL.createObjectURL(blob);
-    const audio = new Audio(audioUrl);
-    audio.play();
-}
-
 function addMessage(text, sender) {
     const messageEl = document.createElement('div');
     messageEl.className = `message ${sender}`;
@@ -140,22 +54,48 @@ function addMessage(text, sender) {
     messagesEl.scrollTop = messagesEl.scrollHeight;
 }
 
-function sendMessage() {
+async function sendMessage() {
     const text = messageInput.value.trim();
-    if (!text || ws.readyState !== WebSocket.OPEN) return;
+    if (!text || isLoading) return;
 
     // Add user message
     addMessage(text, 'user');
 
-    // Send to server
-    const message = {
-        digitalTwinId: currentTwin,
-        digitalTwinName: currentTwin === 'warren-buffett' ? 'Warren Buffett' : 'Lorenzo Canali',
-        prompt: text,
-        tts_options: { voice: 'default' } // Enable TTS
-    };
+    // Show loading
+    isLoading = true;
+    sendButton.textContent = 'Sending...';
+    sendButton.disabled = true;
 
-    ws.send(JSON.stringify(message));
+    try {
+        // Send to API
+        const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                digitalTwinId: currentTwin,
+                prompt: text
+            })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            addMessage(data.reply, 'bot');
+        } else {
+            addMessage(data.error || 'Error', 'bot');
+        }
+
+    } catch (error) {
+        console.error('Fetch error:', error);
+        addMessage('Connection error', 'bot');
+    }
+
+    // Reset loading
+    isLoading = false;
+    sendButton.textContent = 'Send';
+    sendButton.disabled = false;
 
     // Clear input
     messageInput.value = '';
