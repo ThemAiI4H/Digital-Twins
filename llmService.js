@@ -65,7 +65,7 @@ function getSystemPromptForTwin(digitalTwinId) {
 function getModelForTwin(digitalTwinId) {
   const models = {
     "warren-buffett": "ft:gpt-4.1-nano-2025-04-14:ai4smartcity:warren-buffett:CXmgEp7Z",
-    "lorenzo-canali": "ft:gpt-4.1-nano-2025-04-14:ai4smartcity:lorenzocanali:CalnewGM"
+    "lorenzo-canali": "ft:gpt-4.1-nano-2025-04-14:ai4smartcity:lorenzocanali:CbNGRuIZ"
   };
   return models[digitalTwinId];
 }
